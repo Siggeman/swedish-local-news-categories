@@ -1,7 +1,7 @@
 const treeData = [];
 const flatNodes = [];
 
-fetch("/dist/categories-coded.json")
+fetch("categories-coded.json")
 .then(data => data.json())
 .then(jsonData => {
   const maxLevel = Math.max(...jsonData.categories.map(category => category.level));
@@ -42,21 +42,20 @@ fetch("/dist/categories-coded.json")
   });
 }).then(() => {
 
-  var margin = {top: 20, right: 120, bottom: 20, left: 200},
+  let margin = {top: 20, right: 120, bottom: 20, left: 200},
   	width = innerWidth - margin.right - margin.left,
   	height = innerHeight - margin.top - margin.bottom;
-  	
-  var i = 0,
+
+  let i = 0,
   	duration = 750,
   	root;
-
-  var tree = d3.layout.tree()
+  let tree = d3.layout.tree()
   	.size([height, width]);
 
-  var diagonal = d3.svg.diagonal()
+  let diagonal = d3.svg.diagonal()
   	.projection(function(d) { return [d.y, d.x]; });
 
-  var svg = d3.select("body").append("svg")
+  let svg = d3.select("body").append("svg")
   	.attr("width", width + margin.right + margin.left)
   	.attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -65,7 +64,7 @@ fetch("/dist/categories-coded.json")
   root = treeData[0];
   root.x0 = height / 2;
   root.y0 = 0;
-    
+
   update(root);
 
   d3.select(self.frameElement).style("height", "500px");
@@ -76,23 +75,23 @@ fetch("/dist/categories-coded.json")
     infoBox.querySelector("#description").innerHTML = source.description;
     infoBox.querySelector("#code").innerHTML = source.code;
 
-    var circleRadius = 10;
-    var paddingLeftRight = 18; // adjust the padding values depending on font and font size
-    var paddingTopBottom = 5;
+    let circleRadius = 10;
+    let paddingLeftRight = 18; // adjust the padding values depending on font and font size
+    let paddingTopBottom = 5;
 
     // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
+    let nodes = tree.nodes(root).reverse(),
       links = tree.links(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach(function(d) { d.y = d.depth * 180; });
 
     // Update the nodes…
-    var node = svg.selectAll("g.node")
+    let node = svg.selectAll("g.node")
       .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
     // Enter any new nodes at the parent's previous position.
-    var nodeEnter = node.enter().append("g")
+    let nodeEnter = node.enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
       .on("click", click);
@@ -148,7 +147,7 @@ fetch("/dist/categories-coded.json")
       .attr("height", function(d) { return d.bb.height + paddingTopBottom; });
 
     // Transition nodes to their new position.
-    var nodeUpdate = node.transition()
+    let nodeUpdate = node.transition()
   	  .duration(duration)
   	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
@@ -166,7 +165,7 @@ fetch("/dist/categories-coded.json")
   	  .style("opacity", 1); //function (d) { return d.children || d._children ? 1 : 1e-6 });
 
     // Transition exiting nodes to the parent's new position.
-    var nodeExit = node.exit().transition()
+    let nodeExit = node.exit().transition()
   	  .duration(duration)
   	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
   	  .remove();
@@ -180,14 +179,14 @@ fetch("/dist/categories-coded.json")
   	  .style("opacity", 1e-6);
 
     // Update the links…
-    var link = svg.selectAll("path.link")
+    let link = svg.selectAll("path.link")
   	  .data(links, function(d) { return d.target.id; });
 
     // Enter any new links at the parent's previous position.
     link.enter().insert("path", "g")
   	  .attr("class", "link")
   	  .attr("d", function(d) {
-    		var o = {x: source.x0, y: source.y0};
+    		let o = {x: source.x0, y: source.y0};
     		return diagonal({source: o, target: o});
   	  });
 
@@ -200,7 +199,7 @@ fetch("/dist/categories-coded.json")
     link.exit().transition()
   	  .duration(duration)
   	  .attr("d", function(d) {
-    		var o = {x: source.x, y: source.y};
+    		let o = {x: source.x, y: source.y};
     		return diagonal({source: o, target: o});
   	  })
   	  .remove();
